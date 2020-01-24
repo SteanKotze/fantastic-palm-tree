@@ -18,23 +18,3 @@ class Backend_ANN:
 
     #
     #   endregion
-
-    #   region Sets
-
-    #
-    #   endregion
-
-    #   region Gets
-
-    #
-    #   endregion
-
-    #   region Training
-
-    #
-    #   endregion
-
-    #   region Other
-
-    #
-    #   endregion
