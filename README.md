@@ -51,7 +51,7 @@
     },
 
     //hl: Settings - Zen mode
-    "window.zoomLevel":         -2,
+    "window.zoomLevel":         -1,
     "zenMode.hideLineNumbers":  false,
     "zenMode.hideStatusBar":    false,
     "zenMode.hideTabs":         false,
@@ -59,18 +59,31 @@
     //hl: Settings - explorer
     "files.exclude": 
     {
-        "**/__pycache__":   true,
-        "**/__init__.py":   true,
-        "**/.vscode":       true
+        "**/.git": false,
+        "**/.svn": false
     },
-    "workbench.activityBar.visible": false,
+    "workbench.activityBar.visible": true,
 
     "emmet.triggerExpansionOnTab": false,
     "editor.stablePeek": true,
-    "editor.autoIndent": false,
     "editor.quickSuggestions": {
         "other": false,
         "comments": false,
         "strings": false
-    }
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": false,
+        "**/.git/subtree-cache/**": false
+    },
+    "search.exclude": {
+        "**/*.code-search": false
+    },
+    "git.path": "F:\\ProgramFiles\\Git\\bin\\bash.exe",
+    "terminal.integrated.env.windows": {
+        "CHERE_INVOKING": "1"
+    },
+    "terminal.integrated.shellArgs.windows": [
+        "-l"
+    ],
+    "terminal.integrated.shell.windows": "F:\\ProgramFiles\\Git\\bin\\bash.exe"
 }
