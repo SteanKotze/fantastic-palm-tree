@@ -1,12 +1,12 @@
-#ifndef ANNIE_H
-#define ANNIE_H
+#ifndef ANNIECONTOLLER_H
+#define ANNIECONTOLLER_H
 
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-class Annie
+class AnnieController
 {
     private:
         #pragma region Variables
@@ -64,7 +64,7 @@ class Annie
 
         #pragma region Functions
 
-        Annie()
+        void Annie()
         {
             cout << "Annie initialized\n";
         }
