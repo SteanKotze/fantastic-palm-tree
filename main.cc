@@ -11,5 +11,9 @@ int main()
 {
     Annie ann;
     ann.test();
+    
+    int asdf;
+    cin >> asdf;
+    
     return 0;
 }
