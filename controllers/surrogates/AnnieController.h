@@ -64,7 +64,7 @@ class AnnieController
 
         #pragma region Functions
 
-        void Annie()
+        AnnieController()
         {
             cout << "Annie initialized\n";
         }
