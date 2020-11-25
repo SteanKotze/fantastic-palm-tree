@@ -9,9 +9,6 @@ int main()
     ApplicationHelper application_helper;
     application_helper.test();
 
-    MathHelper meth_helper;
-    meth_helper.test();
-
     int i;
     cin >> i;
     

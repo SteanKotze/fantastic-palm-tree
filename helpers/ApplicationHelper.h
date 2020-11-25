@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+#include "MathHelper.h"
+
 using namespace std;
 
 class ApplicationHelper
@@ -40,6 +42,7 @@ class ApplicationHelper
         #pragma region functionality: prints
         void print_2d_array(vector<vector<double>> two_dim_vector)
         {
+            cout.precision(2);
             for (int i = 0; i < two_dim_vector.size(); i++)
             {
                 for (int j = 0; j < two_dim_vector[i].size(); j++)
@@ -61,13 +64,9 @@ class ApplicationHelper
             cout << "\t\tApplicationHelper\t- ticks() - " << this->ticks() << "\n";
             cout << "\t\tApplicationHelper\t- time() - " << this->time() << "\n";
             cout << "\t\tApplicationHelper\t- print_2d_array()\n";
-            vector<vector<double>> two_dim_vector
-            {
-                {0.1, 0.2, 0.3},
-                {0.4, 0.5, 0.6},
-                {0.7, 0.8, 0.9}
-            };
-            this->print_2d_array(two_dim_vector);
+            
+            MathHelper meth_helper;
+            this->print_2d_array(meth_helper.get_shape(3, 3));
 
             cout << "\tApplicationHelper\t- Testing Successful\n\n";
         }
