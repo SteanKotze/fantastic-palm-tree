@@ -39,22 +39,6 @@ class ApplicationHelper
         }
         #pragma endregion
 
-        #pragma region functionality: prints
-        void print_2d_array(vector<vector<double>> two_dim_vector)
-        {
-            cout.precision(2);
-            for (int i = 0; i < two_dim_vector.size(); i++)
-            {
-                for (int j = 0; j < two_dim_vector[i].size(); j++)
-                {
-                    cout << to_string(two_dim_vector[i][j]) << "\t";
-                }
-                cout << "\n";
-            }
-            return;
-        }
-        #pragma endregion
-
         #pragma region testing
         void test()
         {
@@ -63,10 +47,7 @@ class ApplicationHelper
             this->nop();
             cout << "\t\tApplicationHelper\t- ticks() - " << this->ticks() << "\n";
             cout << "\t\tApplicationHelper\t- time() - " << this->time() << "\n";
-            cout << "\t\tApplicationHelper\t- print_2d_array()\n";
             
-            MathHelper meth_helper;
-            this->print_2d_array(meth_helper.get_shape(3, 3));
 
             cout << "\tApplicationHelper\t- Testing Successful\n\n";
         }
