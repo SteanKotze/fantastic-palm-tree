@@ -1,4 +1,5 @@
 #include <iostream>
+#include "helpers/ActivationFunctionHelper.h"
 #include "helpers/ApplicationHelper.h"
 #include "helpers/MathHelper.h"
 
@@ -8,12 +9,9 @@ using namespace std;
 int main() 
 {
     srand(time(NULL));
-    
-    ApplicationHelper application_helper;
-    application_helper.test();
 
-    MathHelper meth_helper;
-    meth_helper.test();
+    ActivationFunctionHelper activation_functions;
+    activation_functions.test();
 
     int i;
     cin >> i;

@@ -192,7 +192,7 @@ class MathHelper
             vector<vector<double>> c = this->matrix_multiplication(a, b);
             this->print_2d_array(c);
 
-            cout << "\tMathHelper\t\t- Testing Successful\n";
+            cout << "\tMathHelper\t\t- Testing Successful\n\n";
         }
         #pragma endregion
 };
