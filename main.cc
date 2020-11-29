@@ -1,4 +1,5 @@
 #include <iostream>
+#include "controllers/surrogates/AnnieController.h"
 #include "helpers/ActivationFunctionHelper.h"
 #include "helpers/ApplicationHelper.h"
 #include "helpers/MathHelper.h"
@@ -9,9 +10,9 @@ using namespace std;
 int main() 
 {
     srand(time(NULL));
-
-    ActivationFunctionHelper activation_functions;
-    activation_functions.test();
+    
+    AnnieController annie;
+    annie.test();
 
     int i;
     cin >> i;
