@@ -2,7 +2,8 @@
     "data" : {
         "lower" : -1.0, 
         "upper" : 1.0, 
-        "center" : 0.0, 
+        "mean": 0.0,
+        "median" : 0.0, 
         "len" : 4177, 
         "requests" : 0
     }, 

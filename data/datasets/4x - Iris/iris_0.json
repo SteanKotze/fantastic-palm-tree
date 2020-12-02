@@ -2,12 +2,13 @@
     "data" : {
         "lower" : -1.0, 
         "upper" : 1.0, 
-        "center" : 0.0, 
+        "mean": 0.0,
+        "median" : 0.0, 
         "len" : 150, 
         "requests" : 0
     }, 
     "input" : {
-        "used" : null, 
+        "used" : [], 
         "unused" : [
             [
                 0.28205128205128194, 
@@ -912,7 +913,7 @@
         ]
     }, 
     "output" : {
-        "used" : null, 
+        "used" : [], 
         "unused" : [
             [
                 1.0, 
@@ -1667,7 +1668,7 @@
         ]
     }, 
     "class" : {
-        "used" : null, 
+        "used" : [], 
         "unused" : []
     }, 
     "show output" : false

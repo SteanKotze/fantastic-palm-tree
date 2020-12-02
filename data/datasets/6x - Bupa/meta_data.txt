@@ -1,0 +1,6 @@
+lower_boundary:-1.0
+upper_boundary:1.0
+mean:0.0
+median:0.0
+dataset_sample_count:345
+number_of_requests:0
