@@ -34,6 +34,81 @@ class DataContainerHelper
             return false;
         }
 
+        void import_dataset_meta_data(vector<string> dataset_meta_data)
+        {
+            int update_counter = 0;
+
+            for (int i = 0; i < dataset_meta_data.size(); i++)
+            {
+                size_t delimiter_position = dataset_meta_data[i].find(":");
+                size_t endl_position = dataset_meta_data[i].find("\n");
+                string key, value;
+
+                key = dataset_meta_data[i].substr(0, delimiter_position);
+                value = dataset_meta_data[i].substr(delimiter_position + 1, endl_position);
+
+                if (key == "dataset_sample_count")
+                {
+                    this->data_sample_count = stoi(value);
+                } else if (key == "number_of_requests")
+                {
+                    this->number_of_requests = stoi(value);
+                }
+            }
+            return;
+        }
+
+        void import_dataset_data(vector<string> data, vector<vector<double>> *unused_data)
+        {
+            for (int i = 0; i < data.size(); i++)
+            {
+                unused_data->push_back(this->text_line_to_vector(data[i]));
+            }
+
+            if (unused_data->size() != this->data_sample_count)
+            {
+                throw "Dataset size does not match meta data for dataset.";
+            }
+
+            return;
+        }
+
+        vector<double> text_line_to_vector(string input_data)
+        {
+            vector<double> output_vector;
+            string data_value = "";
+
+            for(char& data_character : input_data)
+            {
+                if ((data_character != *",") && (data_character != *"\n"))
+                {
+                    data_value += data_character;
+                } else if (data_character == *",")
+                {
+                    output_vector.push_back(stof(data_value));
+                    data_value = "";
+                }
+            }
+            output_vector.push_back(stof(data_value));
+
+            return output_vector;
+        }
+
+        void clear_this()
+        {
+            this->number_of_requests = 0;
+            this->number_of_unique_outputs = 0;
+            this->data_sample_count = 0;
+            this->output_is_active = true;
+
+            this->inputs.clear();
+            this->outputs.clear();
+            this->used_inputs.clear();
+            this->used_outputs.clear();
+
+            return;
+        }
+
     public:
         #pragma region Variables
         //  metadata
@@ -56,7 +131,7 @@ class DataContainerHelper
         DataContainerHelper()
         {
             this->number_of_requests = 0;
-            this-> number_of_unique_outputs = 0;
+            this->number_of_unique_outputs = 0;
             this->data_sample_count = 0;
             this->output_is_active = true;
         }
@@ -71,25 +146,19 @@ class DataContainerHelper
             
             if (this->is_file_empty(dataset_meta_data) || this->is_file_empty(dataset_intputs) || this->is_file_empty(dataset_outputs))
             {
-                cout << "uh oh!\n";
-            } else
-            {
-                cout << "yay\n";
+                return false;
             }
-            
-            
-            
 
-            //  STEP 0: Check if folder exists
-            //  step 1: Check if inputs, outputs, and meta-data files exist
-                //  step 1.1: If files don't exist, throw new exception
-
-            //  step 2: import meta data and save to this
-            //  step 3: import inputs
-                //  step 3.1: ensure inputs conform to meta-data
-
-            //  step 4: import outputs
-                //  step 4.1: ensure outputs conform to meta-data
+            try
+            {
+                this->import_dataset_meta_data(dataset_meta_data);
+                this->import_dataset_data(dataset_intputs, &this->inputs);
+                this->import_dataset_data(dataset_outputs, &this->outputs);
+            } catch (...)
+            {
+                this->clear_this();
+                return false;
+            }
 
             return true;
         }
@@ -173,7 +242,6 @@ class DataContainerHelper
         #pragma region Functionality: General
         void test()
         {
-            //
         }
         #pragma endregion
 };
