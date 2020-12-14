@@ -1,12 +1,39 @@
 #ifndef DATACONTAINERHELPER_H
 #define DATACONTAINERHELPER_H
 
+#include <fstream>
+#include <iostream>
 #include <vector>
 
 using namespace std;
 
 class DataContainerHelper
 {
+    private:
+        vector<string> read_text_file(string file_location)
+        {
+            string temporary_string;
+            vector<string> output_vector;
+            ifstream input_stream(file_location);
+
+            while (getline(input_stream, temporary_string))
+            {
+                output_vector.push_back(temporary_string);
+            }
+
+            input_stream.close();
+            return output_vector;
+        }
+
+        bool is_file_empty(vector<string> file_contents)
+        {
+            if (file_contents.size() <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
     public:
         #pragma region Variables
         //  metadata
@@ -36,17 +63,38 @@ class DataContainerHelper
         #pragma endregion
 
         #pragma region Functionality: Imports and Exports
-        bool import_data()
+        bool import_data_from_text_file(string folder_location)
         {
+            vector<string> dataset_meta_data = this->read_text_file(folder_location + "\\meta_data.txt");
+            vector<string> dataset_intputs = this->read_text_file(folder_location + "\\inputs.txt");
+            vector<string> dataset_outputs = this->read_text_file(folder_location + "\\outputs.txt");
+            
+            if (this->is_file_empty(dataset_meta_data) || this->is_file_empty(dataset_intputs) || this->is_file_empty(dataset_outputs))
+            {
+                cout << "uh oh!\n";
+            } else
+            {
+                cout << "yay\n";
+            }
+            
+            
+            
+
+            //  STEP 0: Check if folder exists
+            //  step 1: Check if inputs, outputs, and meta-data files exist
+                //  step 1.1: If files don't exist, throw new exception
+
+            //  step 2: import meta data and save to this
+            //  step 3: import inputs
+                //  step 3.1: ensure inputs conform to meta-data
+
+            //  step 4: import outputs
+                //  step 4.1: ensure outputs conform to meta-data
+
             return true;
         }
 
-        bool import_data_from_text_file()
-        {
-            return true;
-        }
-
-        bool export_data()
+        bool export_data_to_text_file(string folder_location)
         {
             return true;
         }
