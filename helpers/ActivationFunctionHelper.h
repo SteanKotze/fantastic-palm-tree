@@ -9,217 +9,209 @@ using namespace std;
 class ActivationFunctionHelper
 {
     public:
-        #pragma region variables
+        #pragma region  --- Variables ---
+        //  --- linear ---
         double linear_c;
+        double linear_m;
+        //  --- logistic ---
         double logistic_c;
+        double logistic_m;
+        double logistic_max;
+        //  --- tanH ---
         double tanh_c;
         double tanh_m;
+        //  --- relU ---
         double relu_c;
+        double relu_cut_off;
+        //  --- leaky relU ---
         double leaky_relu_pos_c;
         double leaky_relu_neg_c;
+        double leaky_relu_cut_off;
+        //  --- elU ---
         double elu_linear_c;
         double elu_exponential_c;
+        double elu_cut_off;
+        //  --- srelU ---
         double srelu_lower_c;
         double srelu_center_c;
         double srelu_upper_c;
         double srelu_lower_boundary;
         double srelu_upper_boundary;
-        #pragma endregion
 
-        #pragma region functionality
         ActivationFunctionHelper()
         {
-            this->linear_c = 1.0;
-            this->logistic_c = 1.0;
-            this->tanh_c = 1.0;
+            this->linear_c = 0.0;
+            this->linear_m = 1.0;
+            this->logistic_c = 0.0;
+            this->logistic_m = 1.0;
+            this->logistic_max = 1.0;
+            this->tanh_c = 0.0;
             this->tanh_m = 1.0;
             this->relu_c = 1.0;
+            this->relu_cut_off = 0.0;
             this->leaky_relu_pos_c = 1.0;
             this->leaky_relu_neg_c = 0.01;
+            this->leaky_relu_cut_off = 0.0;
             this->elu_linear_c = 1.0;
             this->elu_exponential_c = 1.0;
+            this->elu_cut_off = 0.0;
             this->srelu_lower_c = 0.1;
             this->srelu_center_c = 1.0;
             this->srelu_upper_c = 0.1;
             this->srelu_lower_boundary = -1.0;
             this->srelu_upper_boundary = 1.0;
         }
+        #pragma endregion
 
-        double get_activation_value(int activation_function, double x_axis)
+        #pragma region  --- Functionality ---
+        double get_activation_value(int activation_function, double x)
         {
             switch (activation_function)
             {
                 case 0:
-                    return this->linear(x_axis);
+                    return this->linear(x);
                 case 1:
-                    return this->logistic(x_axis);
+                    return this->logistic(x);
                 case 2:
-                    return this->tanH(x_axis);
+                    return this->tanH(x);
                 case 3:
-                    return this->relu(x_axis);
+                    return this->relu(x);
                 case 4:
-                    return this->leaky_relu(x_axis);
+                    return this->leaky_relu(x);
                 case 5:
-                    return this->elu(x_axis);
+                    return this->elu(x);
                 case 6:
-                    return this->srelu(x_axis);
+                    return this->srelu(x);
                 default:
                     return 0.0;
             }
         }
 
-        double get_activation_derivative_value(int activation_function, double x_axis)
+        double get_activation_derivative_value(int activation_function, double x)
         {
             switch (activation_function)
             {
                 case 0:
-                    return this->linear_derivative(x_axis);
+                    return this->linear_derivative(x);
                 case 1:
-                    return this->logistic_derivative(x_axis);
+                    return this->logistic_derivative(x);
                 case 2:
-                    return this->tanH_derivative(x_axis);
+                    return this->tanH_derivative(x);
                 case 3:
-                    return this->relu_derivative(x_axis);
+                    return this->relu_derivative(x);
                 case 4:
-                    return this->leaky_relu_derivative(x_axis);
+                    return this->leaky_relu_derivative(x);
                 case 5:
-                    return this->elu_derivative(x_axis);
+                    return this->elu_derivative(x);
                 case 6:
-                    return this->srelu_derivative(x_axis);
+                    return this->srelu_derivative(x);
                 default:
                     return 0.0;
             }
         }
 
-        double linear(double x_axis)
+        double linear(double x)
         {
-            // y = mx + c
-            return this->linear_c * x_axis;
+            return this->linear(this->linear_c, this->linear_m, x);
         }
 
-        double linear_derivative(double x_axis)
+        double linear(double c, double m, double x)
+        {
+            // y = m.x + c
+            return m*x + c;
+        }
+
+        double linear_derivative(double x)
         {
             // 'y = m
             return this->linear_c;
         }
 
-        double logistic(double x_axis)
+        double logistic(double x)
         {
-            double output = 1.0 / ( 1.0 + exp(-1.0 * this->logistic_c * x_axis));
-            return output;
+            //  y = 1/(1 + e^(-c.x))
+            return this->logistic_max / ( 1.0 + exp( -1.0 * this->logistic_m * (x - this->logistic_c) ) );
         }
 
-        double logistic_derivative(double x_axis)
+        double logistic_derivative(double x)
         {
-            double output = this->logistic(x_axis);
-            output = this->logistic_c * output * (1.0 - output);
-            return output;
+            //  `y = y(1 -y)
+            double output = this->logistic(x);
+            return this->logistic_m * output * (1.0 - output);
         }
 
-        double tanH(double x_axis)
+        double tanH(double x)
         {
-            return this->tanh_m * tanh(this->tanh_c * x_axis);
+            //  y = m.tanh(c.x)
+            return this->tanh_m * tanh(this->tanh_c + x);
         }
 
-        double tanH_derivative(double x_axis)
+        double tanH_derivative(double x)
         {
-            double output = this->tanH(x_axis);
-            output = this->tanh_m * this->tanh_c * (1.0 - output * output);
-            return output;
+            double output = this->tanH(x);
+            return this->tanh_m * (1.0 - output * output);
         }
 
-        double relu(double x_axis)
+        double relu(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->relu_c * x_axis;
-            } else
-            {
-                return 0.0;
-            }
+            if (x >= this->relu_cut_off) return this->relu_c * x;
+            return 0.0;
         }
 
-        double relu_derivative(double x_axis)
+        double relu_derivative(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->relu_c;
-            } else
-            {
-                return 0.0;
-            }
+            if (x >= this->relu_cut_off) return this->relu_c;
+            return 0.0;
         }
 
-        double leaky_relu(double x_axis)
+        double leaky_relu(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->leaky_relu_pos_c * x_axis;
-            } else
-            {
-                return this->leaky_relu_neg_c * x_axis;
-            }
+            if (x >= this->leaky_relu_cut_off) return this->leaky_relu_pos_c * x;
+            return this->leaky_relu_neg_c * x;
         }
 
-        double leaky_relu_derivative(double x_axis)
+        double leaky_relu_derivative(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->leaky_relu_pos_c;
-            } else
-            {
-                return this->leaky_relu_neg_c;
-            }
-            
+            if (x >= this->leaky_relu_cut_off) return this->leaky_relu_pos_c;
+            return this->leaky_relu_neg_c;            
         }
 
-        double elu(double x_axis)
+        double elu(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->elu_linear_c * x_axis;
-            } else
-            {
-                return this->elu_exponential_c * (exp(x_axis) - 1.0);
-            }            
+            if (x >= this->elu_cut_off) return this->elu_linear_c * x;
+            return this->elu_exponential_c * (exp(x) - 1.0);
         }
 
-        double elu_derivative(double x_axis)
+        double elu_derivative(double x)
         {
-            if (x_axis >= 0)
-            {
-                return this->elu_linear_c;
-            } else
-            {
-                return (this->elu(x_axis) - this->elu_exponential_c);
-            }
-            
+            if (x >= this->elu_cut_off) return this->elu_linear_c;
+            return (this->elu(x) - this->elu_exponential_c);            
         }
 
-        double srelu(double x_axis)
+        double srelu(double x)
         {
-            if (x_axis <= this->srelu_lower_boundary)
+            if (x <= this->srelu_lower_boundary)
             {
                 double neg_y_value = this->srelu_center_c * this->srelu_lower_boundary;
                 double neg_c = neg_y_value - ( this->srelu_lower_c * this->srelu_lower_boundary );
-                return this->srelu_lower_c * x_axis + neg_c;
-            } else if (x_axis >= this->srelu_upper_boundary)
+                return this->srelu_lower_c * x + neg_c;
+            } else if (x >= this->srelu_upper_boundary)
             {
                 double pos_y_value = this->srelu_center_c * this->srelu_upper_boundary;
                 double pos_c = pos_y_value - ( this->srelu_upper_c * this->srelu_upper_boundary );
-                return this->srelu_upper_c * x_axis + pos_c;
+                return this->srelu_upper_c * x + pos_c;
             } else
             {
-                return this->srelu_center_c * x_axis;
+                return this->srelu_center_c * x;
             }
         }
 
-        double srelu_derivative(double x_axis)
+        double srelu_derivative(double x)
         {
-            if (x_axis <= this->srelu_lower_boundary)
+            if (x <= this->srelu_lower_boundary)
             {
                 return this->srelu_lower_c;
-            } else if (x_axis >= this->srelu_upper_boundary)
+            } else if (x >= this->srelu_upper_boundary)
             {
                 return this->srelu_upper_c;
             } else
